@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
 Title : Trainer Functions
 
 Description : This the functions that help make it a bit easier to use Keras 
