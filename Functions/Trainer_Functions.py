@@ -165,7 +165,7 @@ numpy
 Inputs:
 Data_Array - data array that should be split dtype = numpy array
 X_list - x x locations of data dtype = list
-Y_list  - y locations of data dtype = lsit
+Y_list  - y locations of data dtype = list
 train_list - the index of training data dtype = list
 valid_list - the index of validation data dtype = list
 

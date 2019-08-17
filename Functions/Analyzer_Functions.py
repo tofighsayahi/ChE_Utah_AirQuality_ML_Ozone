@@ -40,7 +40,7 @@ os
 
 Inputs:
 plot_name - name of plot dtype = str
-fig - matplotlib figure dtype = matpl
+fig - matplotlib figure dtype = matplotlib
 
 Optional Inputs:
 export_path - path to export to dtype = str
