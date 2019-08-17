@@ -9,7 +9,7 @@ from sklearn.externals import joblib
 import pandas as pd
 from keras.models import load_model
 import os
-function_path = "D:/Python_Repository/che_utah_air_quality_group/Functions"
+function_path = "../Functions"
 os.chdir(function_path)
 from Trainer_Functions import r2_keras,r2,mse
 from Analyzer_Functions import export_graphs
@@ -46,7 +46,7 @@ s = joblib.load(import_norm_path)
 
 params_target = 'O3 Value'
 index = header.index(params_target)
-
+#get x and y location
 header_num = len(header)
 Full_List = list(np.arange(0,header_num-1+1e-6,1,dtype=int))
 Y_Loc =  header.index(params_target)
@@ -55,7 +55,7 @@ Y_header_list.append(Y_Loc)
 X_header_list = list(set(Full_List)-set(Y_header_list))
 
 
-
+#divide data
 data_array = np.array(df)
 Y = data_array[:,Y_header_list]
 X = data_array[:,X_header_list]
@@ -66,7 +66,7 @@ sensor_loc+=1
 sensor_list = []
 sensor_list.append(0)
 sensor_list += list(sensor_loc)
-
+#load the model
 model = load_model(import_nnet_path,custom_objects={'r2_keras':r2_keras})
 Y_pred = model.predict(X)
 error = np.sqrt((Y_pred-Y)**2)
@@ -75,20 +75,21 @@ error = np.sqrt((Y_pred-Y)**2)
 Stack_Actual = data_array.copy()
 Stack_Predict = data_array.copy()
 Stack_Predict[:,Y_Loc] = Y_pred.ravel()
-
+#inverse from normalizaton
 Data_Array_Actual_invnorm = s.inverse_transform(Stack_Actual)
 Data_Array_Predict_invnorm = s.inverse_transform(Stack_Predict)
-
+#Store Y data
 Y_pred_ppm = Data_Array_Predict_invnorm[:,Y_Loc]
 Y_act_ppm = Data_Array_Actual_invnorm[:,Y_Loc]
 
-
+#calcualte error
 error_ppm = np.sqrt((Y_pred_ppm-Y_act_ppm)**2).reshape(-1,1)
 max_error_ppm = np.max(error_ppm)
 min_error_ppm = np.min(error_ppm)
 
 #
 for i in range(0,len(sensor_list)-1,1):
+    #plot datetime vs abs error
     fig = plt.figure(figsize=(15,6))
     plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
                 error[sensor_list[i]:sensor_list[i+1]],s=1.0,c = error[sensor_list[i]:sensor_list[i+1]],cmap = cm.inferno,vmin=0, vmax=1)
@@ -100,6 +101,7 @@ for i in range(0,len(sensor_list)-1,1):
     name = 'Time_Series'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
 
+    #plot datetime vs error in ppm
 
     fig = plt.figure(figsize=(15,6))
     plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
@@ -112,6 +114,8 @@ for i in range(0,len(sensor_list)-1,1):
     name = 'Real_Variable_Time_Series'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
     
+    #plot datetime vs Ozone in ppm
+
     fig = plt.figure(figsize=(15,6))
     plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
                 Y_act_ppm[sensor_list[i]:sensor_list[i+1]],s=1.0,c = 'k',label = 'Data')

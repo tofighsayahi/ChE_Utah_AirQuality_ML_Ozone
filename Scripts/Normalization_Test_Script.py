@@ -1,13 +1,25 @@
 # -*- coding: utf-8 -*-
 """
+Title : Normalization Test Script
+
+Script used for testing if normalization was done correctly
 Created on Mon Aug  5 11:47:42 2019
 
 @author: Tim
 """
+#Sepecify these few things and the whole thing will test
+number_random = 100
+all_data_path =\
+r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\All_Data_norm.csv"
+train_valid_path =\
+r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\train_validate_data.csv"
+
+
+
 import numpy as np
 import pandas as pd
 from statistics import mode 
-
+#function that deletes unnecessary stuff
 def clean_dataframe_list(df,delete_list):
     header = list(df)
     for i in range(0,len(delete_list)):
@@ -15,12 +27,7 @@ def clean_dataframe_list(df,delete_list):
       del df[header[index]]
       del header[index]
     return df 
-
-number_random = 100
-all_data_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\All_Data_norm.csv"
-train_valid_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\train_validate_data.csv"
+#load data in
 df_data_all = pd.read_csv(all_data_path)
 df_valid_train = pd.read_csv(train_valid_path)
 
@@ -34,12 +41,14 @@ header_vt = list(df_valid_train)
 
 #get different random locations
 shapes = df_valid_train.shape
+#sets up storage
 random_indexes =\
 np.random.randint(0,shapes[0],number_random).reshape(-1,1)
 fail_headers = []
 pass_fail = np.zeros(number_random,dtype = bool)
 value_save = np.zeros(number_random)
 for i in range(0,number_random,1):
+    #ranodmely checks certain rows and finds a match
     temp_train = df_valid_train.loc[random_indexes[i]]
     header_temp = list(temp_train)
     temp_store = []
@@ -52,6 +61,7 @@ for i in range(0,number_random,1):
         temp_store+=list(np.where(error<1e-3)[0])
     common_values = mode(temp_store)
     values = temp_store.count(common_values)/(len(header_temp))
+    #finds why and where it fails exactly
     if values==1:
         pass_fail[i] = True
         fail_headers.append('Pass')
@@ -69,6 +79,6 @@ for i in range(0,number_random,1):
                 debug_header.append(header_temp[j])
         fail_headers.append(debug_header)
 
-    
+    #saves value
     value_save[i] = common_values
     
