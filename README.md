@@ -16,4 +16,4 @@ This is the function folder that is referenced in the scripts.
 
 ## Jupyter Notebooks
 
-If Jupyter notebooks do not open please look up the repository via the organization
+If Jupyter notebooks do not open please look up the repository via the organization ie. machine-learning-airu-ozone
