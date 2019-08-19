@@ -164,7 +164,7 @@ numpy
 
 Inputs:
 Data_Array - data array that should be split dtype = numpy array
-X_list - x x locations of data dtype = list
+X_list - x locations of data dtype = list
 Y_list  - y locations of data dtype = list
 train_list - the index of training data dtype = list
 valid_list - the index of validation data dtype = list
@@ -210,8 +210,8 @@ r2_keras
 numpy 
 
 Inputs:
-path = path where the neural network is saved dtype = str
-name = name of the neural network dtype = str
+path - path where the neural network is saved dtype = str
+name - name of the neural network dtype = str
 X_input - numpy array of X data dtype = numpy array
 
 Optional Inputs:

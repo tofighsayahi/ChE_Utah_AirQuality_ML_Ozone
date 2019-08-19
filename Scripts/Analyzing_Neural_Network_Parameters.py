@@ -12,13 +12,12 @@ import os
 function_path = "../Functions"
 os.chdir(function_path)
 from Trainer_Functions import r2_keras
-from Analyzer_Functions import export_graphs
+from Analyzer_Functions import export_graphs,Parameter_Analysis
 from keras.models import load_model
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-from copy import deepcopy
 
 #Setup system
 plt.close('all')
@@ -44,37 +43,16 @@ load_model_path =\
 r"D:\AirQuality _Research\Neural_Network\Reduce_Params_Redo\Remove SWD_Limit_Nodes\remove_swd_nnet_node_mse_16layer_2new.h5"
 model = load_model(load_model_path,custom_objects={'r2_keras':r2_keras})
 model.summary()
+#call custom function
+fig_save,plt_name_save,range_save = Parameter_Analysis(model,header,X_header_list)
+#export figure
+for i in range(0,len(fig_save)):
+    export_graphs(plt_name_save[i],fig_save[i])
 
 
 
-#itterate over each parameter
-input_dim_ = len(X_header_list)
-rows = 500
-range_save = np.zeros(input_dim_)
-header_plot1 = []
-header_plot2 = []
-for i in range(0,input_dim_,1):
-    #give average value of 0.5
-    X_valid = np.ones([rows,input_dim_])*0.5
-    #change one parameter
-    X_valid[:,i] = np.linspace(0,1,rows)
-    Y_pred = model.predict(X_valid)
-    #zero so that it its easier to read
-    Y_zero = Y_pred-np.min(Y_pred)
-    #plot figure
-    fige = plt.figure()
-    plt.title(header[X_header_list[i]])
-    plt.scatter( X_valid[:,i],Y_zero,c = 'r',s=10)
-#    X_Data = df[header[X_header_list[i]]]
-#    Y_Data = df['O3 Value']
-#    plt.scatter( X_Data,Y_Data,c = 'b',s=1)
+#plot hist
+#X_header = header.remove('O3 Value')
+#plt.figure()
+#plt.bar(range_save,label=X_header)
 
-    plt.xlabel('Input Value')
-    plt.ylabel('Output Value')
-#    plt.xlim(-0.1,1.1)
-#    plt.ylim(-0.1,1.1)
-    plt.tight_layout()
-    plot_name = header[X_header_list[i]]+'_'
-    #export figure
-    export_graphs(plot_name,fig=fige,filetype = '.jpg')
-    range_save[i] = np.max(Y_pred)-np.min(Y_pred)
