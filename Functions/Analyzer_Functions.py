@@ -98,7 +98,7 @@ def plot_settings(ax_size,x_tick_size,y_tick_size,figure_size):
     rcParams['ytick.labelsize'] = y_tick_size
     rcParams['font.family'] = 'serif'
     rcParams['font.serif'] = ['Computer Modern Roman']
-    rcParams['text.usetex'] = True
+#    rcParams['text.usetex'] = True
     rcParams['figure.figsize'] = figure_size
 
 
