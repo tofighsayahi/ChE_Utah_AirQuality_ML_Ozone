@@ -128,13 +128,20 @@ Optional Outputs:
 None    
     
 """
-def plot_parity(yvalid,ypred,xlabel,ylabel,c = 'b', s = 1):
+def plot_parity(yvalid,ypred,xlabel,ylabel,c = 'b', s = 1,maxset=False):
     fig = plt.figure()
     xy = np.linspace(0,1,100)
+    
+    if maxset:
+      max_xy = np.max(ypred)
+      xy = np.linspace(0,max_xy,100)
+      
     plt.plot(xy,xy,'k')
     plt.scatter(yvalid,ypred,c= c,s= s)
-    plt.xlim(-0.1,1.1)
-    plt.ylim(-0.1,1.1)
+    if maxset:
+        max_xy = np.max(yvalid)
+        plt.xlim(-0.1*max_xy,1.1*max_xy)
+        plt.ylim(-0.1*max_xy,1.1*max_xy)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.tight_layout()
