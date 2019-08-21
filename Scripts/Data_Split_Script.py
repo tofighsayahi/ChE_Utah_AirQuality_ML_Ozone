@@ -27,6 +27,9 @@ name_list = ['outsider_data.csv','train_validate_data.csv',\
 #variables that should be omited
 omit_list = ['date','Sensor']
 
+
+
+
 for i in range(0,len(import_list_files),1):
     df = pd.read_csv(import_list_files[i])
     df_omit = df[omit_list]
