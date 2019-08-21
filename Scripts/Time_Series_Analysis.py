@@ -94,7 +94,7 @@ for i in range(0,len(Sensor_name),1):
     plt.xlabel('Date')
     plt.ylabel('Error')
     plt.title('Time Series of Sensor:'+Sensor_name[i])
-    plt.tight_layout()
+    plt.tight_layout(pad = 0.1)
     name = 'Time_Series'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
 
@@ -106,7 +106,7 @@ for i in range(0,len(Sensor_name),1):
     plt.xlabel('Date')
     plt.ylabel('Error ($ppm$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
-    plt.tight_layout()
+    plt.tight_layout(pad = 0.1)
     name = 'Real_Variable_Time_Series'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
     
@@ -122,7 +122,7 @@ for i in range(0,len(Sensor_name),1):
     plt.xlabel('Date')
     plt.ylabel('$O_3$ ($ppm$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
-    plt.tight_layout()
+    plt.tight_layout(pad = 0.1)
     name = 'Real_Variable_Time_Series_actual_data_'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
     
