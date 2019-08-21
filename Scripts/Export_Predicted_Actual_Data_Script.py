@@ -28,6 +28,15 @@ r"E:\PhD project\ozone\08212019_All_Data_Norm\large_data_norm.pkl"
 import_data_path =\
 r"E:\PhD project\ozone\08212019_All_Data_Norm\All_Data_norm.csv"
 
+export_data_path =\
+r"E:\PhD project\ozone\08212019_All_Data_End"
+
+export_actual_name =\
+'All_Data.csv'
+
+export_pred_name =\
+'All_Data_pred.csv'
+
 plot_settings(30,25,25,20,[30,10])
 
 #read data in 
@@ -56,14 +65,31 @@ Y_header_list = []
 Y_header_list.append(Y_Loc)
 X_header_list = list(set(Full_List)-set(Y_header_list))
 
-
 #divide data
 data_array = np.array(df)
 Y = data_array[:,Y_header_list]
 X = data_array[:,X_header_list]
 
-
 #load the model
 model = load_model(import_nnet_path,custom_objects={'r2_keras':r2_keras})
 Y_pred = model.predict(X)
+#restack data
+Stack_Actual = data_array.copy()
+Stack_Predict = data_array.copy()
+Stack_Predict[:,Y_Loc] = Y_pred.ravel()
+#use normalization function to get out of normalization
+Data_Array_Actual_invnorm = s.inverse_transform(Stack_Actual)
+Data_Array_Predict_invnorm = s.inverse_transform(Stack_Predict)
+
+#get data together and export 
+df_act = pd.DataFrame(data = Data_Array_Actual_invnorm,columns = header)
+df_act = pd.concat([df_omit,df_act],axis=1,join='outer')
+path_actual = os.path.join(export_data_path,export_actual_name)
+df_act.to_csv(path_actual,index=False)
+
+
+df_pred = pd.DataFrame(data = Data_Array_Predict_invnorm,columns = header)
+df_pred = pd.concat([df_omit,df_pred],axis=1,join='outer')
+path_pred = os.path.join(export_data_path,export_pred_name)
+df_pred.to_csv(path_pred,index=False)
 
