@@ -76,13 +76,13 @@ Stack_Predict[:,Y_Loc] = Y_pred.ravel()
 Data_Array_Actual_invnorm = s.inverse_transform(Stack_Actual)
 Data_Array_Predict_invnorm = s.inverse_transform(Stack_Predict)
 #Store Y data
-Y_pred_ppm = Data_Array_Predict_invnorm[:,Y_Loc]
-Y_act_ppm = Data_Array_Actual_invnorm[:,Y_Loc]
+Y_pred_ppb = Data_Array_Predict_invnorm[:,Y_Loc]*1000
+Y_act_ppb = Data_Array_Actual_invnorm[:,Y_Loc]*1000
 
 #calcualte error
-error_ppm = np.sqrt((Y_pred_ppm-Y_act_ppm)**2).reshape(-1,1)
-max_error_ppm = np.max(error_ppm)
-min_error_ppm = np.min(error_ppm)
+error_ppb = np.sqrt((Y_pred_ppb-Y_act_ppb)**2).reshape(-1,1)
+max_error_ppb = np.max(error_ppb)
+min_error_ppb = np.min(error_ppb)
 
 #
 for i in range(0,len(Sensor_name),1):
@@ -102,9 +102,9 @@ for i in range(0,len(Sensor_name),1):
 
     fig = plt.figure()
     plt.plot(date[sensor_index],\
-                error_ppm[sensor_index],'-k',linewidth=2.0)
+                error_ppb[sensor_index],'-k',linewidth=2.0)
     plt.xlabel('Date')
-    plt.ylabel('Error ($ppm$)')
+    plt.ylabel('Error ($ppb$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
     plt.tight_layout(pad = 0.1)
     name = 'Real_Variable_Time_Series'+Sensor_name[i]
@@ -114,13 +114,13 @@ for i in range(0,len(Sensor_name),1):
 
     fig = plt.figure()
     plt.plot(date[sensor_index],\
-                Y_act_ppm[sensor_index],'k',linewidth=2.0,label = 'Data')
+                Y_act_ppb[sensor_index],'k',linewidth=2.0,label = 'Data')
     plt.plot(date[sensor_index],\
-            Y_pred_ppm[sensor_index],'--b',linewidth=1.0,label = 'Prediction')
+            Y_pred_ppb[sensor_index],'--b',linewidth=1.0,label = 'Prediction')
     
     plt.legend()
     plt.xlabel('Date')
-    plt.ylabel('$O_3$ ($ppm$)')
+    plt.ylabel('$O_3$ ($ppb$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
     plt.tight_layout(pad = 0.1)
     name = 'Real_Variable_Time_Series_actual_data_'+Sensor_name[i]
