@@ -22,10 +22,11 @@ import pandas as pd
 
 #export combined data file
 export_alldata_path =\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1_SWD_PM10"
+r"E:\PhD project\ozone\08212019_All_Data_Norm"
+
 #Import sensor data files 
 import_alldata_path =\
- "D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Raw_Data_Ordered"
+r"E:\PhD project\ozone\08212019_All_Data_Clean"
 
 #export name
 export_all_data = 'All_Data.csv'
@@ -41,8 +42,8 @@ Omit_list = ['date','Sensor']
 delete_list = ['NOX Value','NO Value','MC Value']
 delete_list+=['CO Value','NO2 Value']
 delete_list+=[ 'SWD Value']
-delete_list+=['PM10_AIR_U_Sensor','Min_PM10_AIR_U_Sensor','Max_PM10_AIR_U_Sensor']
-delete_list+=['PM1_AIR_U_Sensor','Min_PM1_AIR_U_Sensor','Max_PM1_AIR_U_Sensor']
+#delete_list+=['PM10_AIR_U_Sensor','Min_PM10_AIR_U_Sensor','Max_PM10_AIR_U_Sensor']
+#delete_list+=['PM1_AIR_U_Sensor','Min_PM1_AIR_U_Sensor','Max_PM1_AIR_U_Sensor']
 delete_list+=Omit_list
 
 #clean the dataframe yields a dataframe with variables that will be normalized

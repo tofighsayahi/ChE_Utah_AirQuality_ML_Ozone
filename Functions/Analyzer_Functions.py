@@ -26,6 +26,7 @@ from matplotlib import rcParams
 import numpy as np
 import datetime 
 from copy import deepcopy as dc
+from scipy.stats import linregress
 
 """
 Title:
@@ -55,7 +56,7 @@ Optional Outputs:
 None 
 """
 
-def export_graphs(plot_name,fig,export_path = r"D:\AirQuality _Research\Plots",\
+def export_graphs(plot_name,fig,export_path = "E:\PhD project\ozone\Plots",\
                   filetype='.pdf',dpi_set = 300,padset = 0.1):
     #set date
     today_date = datetime.datetime.today()
@@ -92,12 +93,13 @@ None
 """
 
 
-def plot_settings(ax_size,x_tick_size,y_tick_size,figure_size):
+def plot_settings(ax_size,x_tick_size,y_tick_size,labelsize,figure_size):
     rcParams['axes.labelsize'] = ax_size
     rcParams['xtick.labelsize'] = x_tick_size
     rcParams['ytick.labelsize'] = y_tick_size
     rcParams['font.family'] = 'serif'
     rcParams['font.serif'] = ['Computer Modern Roman']
+    rcParams['legend.fontsize'] = labelsize
 #    rcParams['text.usetex'] = True
     rcParams['figure.figsize'] = figure_size
 
@@ -128,22 +130,32 @@ Optional Outputs:
 None    
     
 """
-def plot_parity(yvalid,ypred,xlabel,ylabel,c = 'b', s = 1,maxset=False):
+def plot_parity(yvalid,ypred,xlabel,ylabel,c = 'b', s = 1,maxset=True,\
+                text_size = 20):
     fig = plt.figure()
     xy = np.linspace(0,1,100)
-    
+    max_xy = np.max(ypred)
+
     if maxset:
-      max_xy = np.max(ypred)
       xy = np.linspace(0,max_xy,100)
       
-    plt.plot(xy,xy,'k')
-    plt.scatter(yvalid,ypred,c= c,s= s)
+    plt.plot(xy,xy,color = 'grey',linestyle = '--',label = '$45^o$ Line')
+    
     if maxset:
         max_xy = np.max(yvalid)
         plt.xlim(-0.1*max_xy,1.1*max_xy)
         plt.ylim(-0.1*max_xy,1.1*max_xy)
+    
+    m,b,r,p,std = linregress(yvalid,ypred)
+    r2 = r*r
+    yline = (m*xy)+b
+    plt.plot(xy,yline,'-k',linewidth=2.0,label = 'Model Line')
+    plt.scatter(yvalid,ypred,c= c,s= s,label = 'Data')
+    plt.text(0.65*max_xy,0.1*max_xy,('$R^2$ = %0.3f'%r2),fontsize = text_size)
+    plt.text(0.65*max_xy,0.2*max_xy,('$y = %0.3f x+%0.3f$'%(m,b)),fontsize = text_size)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.legend()
     plt.tight_layout()
     return fig
 
@@ -192,7 +204,7 @@ def Parameter_Analysis(model,header,X_header_list,bounds=False):
         Y_zero = Y_pred-np.min(Y_pred)
         #plot figure
         fig_save[i] = plt.figure()
-        plt.scatter( X_valid[:,i],Y_zero,c = 'r',s=10)    
+        plt.scatter( X_valid[:,i],Y_zero,c = 'k',s=10)    
         plt.xlabel('Input Value')
         plt.ylabel('Output Value')
         if bounds:

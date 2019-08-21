@@ -15,17 +15,10 @@ import os
 
 #List of all files that are imported could be one or multiple files
 import_list_files =\
-[r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1\All_Data_norm.csv",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1_SWD_PM10\All_Data_norm.csv",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\All_Data_norm.csv",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\SWD\All_Data_norm.csv"]
-
+[r"E:\PhD project\ozone\08212019_All_Data_Norm\All_Data_norm.csv"]
 #List of all the directories to output to should be the same length as import_list_files
 export_list =\
-[r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1_SWD_PM10",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10",\
- r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\SWD"]
+[r"E:\PhD project\ozone\08212019_All_Data_Split"]
 
 
 #names of export file names
@@ -41,6 +34,12 @@ for i in range(0,len(import_list_files),1):
     Sensor_List =df[['Sensor']].values.T.tolist()[0]
     dates = df['date'].copy()
     unique_sensor = list(set(Sensor_List))
+    #sensors that should be put in "other" 
+    ##may want to change if sensor is in hawthorne or in rosepark
+    ## right now it is the first and last
+    sensor_other = unique_sensor[0],unique_sensor[-1]
+    print('Sensors Chosen to be in Other:')
+    print(sensor_other)
     #removes omits
     for j in range(0,len(omit_list),1):
         del df[omit_list[j]]
@@ -48,10 +47,11 @@ for i in range(0,len(import_list_files),1):
     valid_index = []
     #if 'ts' in the name then put in the other list
     for j in range(0,len(Sensor_List),1):
-        if Sensor_List[j][0:2]=='ts':
-            other_index.append(j)
-        else:
-            valid_index.append(j)
+        for k in range(0,len(sensor_other)):
+            if Sensor_List[j]==sensor_other[k]:
+                other_index.append(j)
+            else:
+                valid_index.append(j)
     #get other and valid datasets
     df_other = df.loc[other_index]
     df_valid = df.loc[valid_index]

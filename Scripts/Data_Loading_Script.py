@@ -36,9 +36,10 @@ Remove_AirU_timezone
 
 ## Import all raw data this is a directory with all of the data both DAQ and AirU
 import_path =\
-r"D:\AirQuality _Research\Data\Full_Year"
+r"E:\PhD project\ozone\08212019_All_Data_Single_Directory"
 ## Export the cleaned and organized csvs from this script
-export_path = r"D:\AirQuality _Research\Data\Output_Clean"
+export_path =\
+r"E:\PhD project\ozone\08212019_All_Data_Clean"
 
 ## Locations Usually Hawthorne and RosePark
 ## Must put location with solar radiation first

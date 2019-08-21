@@ -17,11 +17,10 @@ from Cleaner_Loader_Functions import sub_main_merge
 
 #Where are the AirU directory
 import_path_AIR_U =\
-r"D:\AirQuality _Research\Data\AirU_Data"
+r"E:\PhD project\ozone\all data"
 
 #Where do you want to dump the files?
 export_path_Air_U = \
-r"D:\AirQuality _Research\Data\Full_Year"
-
+r"E:\PhD project\ozone\08212019_All_Data_Single_Directory"
 #Function that does this work
 sub_main_merge(import_path_AIR_U,export_path_Air_U)

@@ -10,10 +10,9 @@ Created on Mon Aug  5 11:47:42 2019
 #Sepecify these few things and the whole thing will test
 number_random = 100
 all_data_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\All_Data_norm.csv"
+r"E:\PhD project\ozone\08212019_All_Data_Norm\All_Data.csv"
 train_valid_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM10\train_validate_data.csv"
-
+r"E:\PhD project\ozone\08212019_All_Data_Norm\All_Data_norm.csv"
 
 
 import numpy as np
@@ -35,8 +34,8 @@ header_all = list(df_data_all)
 
 
 #delete the list of variables we dont care about
-#delete_list = ['date','Sensor']
-#df_valid_train = clean_dataframe_list(df_valid_train,delete_list)
+delete_list = ['date','Sensor']
+df_valid_train = clean_dataframe_list(df_valid_train,delete_list)
 header_vt = list(df_valid_train)
 
 #get different random locations

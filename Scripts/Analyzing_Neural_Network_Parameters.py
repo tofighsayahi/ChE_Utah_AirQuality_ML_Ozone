@@ -25,7 +25,7 @@ random.seed(7)
 np.random.seed(7)
 #set path to data
 full_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params_Upload_GoogleDrive\SWD\train_validate_data.csv"
+r"E:\PhD project\ozone\08212019_All_Data_Split\train_validate_data.csv"
 
 #read data and parse the data
 df = pd.read_csv(full_path)    
@@ -40,7 +40,7 @@ X_header_list = list(set(Full_List)-set(Y_header_list))
 
 #load neural network
 load_model_path =\
-r"D:\AirQuality _Research\Neural_Network\Reduce_Params_Redo\Remove SWD_Limit_Nodes\remove_swd_nnet_node_mse_16layer_2new.h5"
+r"E:\PhD project\ozone\Saved_Neural_Networks\082119_nnet_node_mse_40layer_1new.h5"
 model = load_model(load_model_path,custom_objects={'r2_keras':r2_keras})
 model.summary()
 #call custom function

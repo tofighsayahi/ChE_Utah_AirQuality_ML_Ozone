@@ -19,16 +19,18 @@ import matplotlib.pyplot as plt
 plt.close('all')
 
 outside_data_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params_Upload_GoogleDrive\SWD\outsider_data.csv" 
+r"E:\PhD project\ozone\08212019_All_Data_Split\outsider_data.csv"
 
 train_valid_data_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params_Upload_GoogleDrive\SWD\train_validate_data.csv"
+r"E:\PhD project\ozone\08212019_All_Data_Split\train_validate_data.csv"
 
 neural_network_path =\
-r"D:\AirQuality _Research\Neural_Network\Reduce_Params_Small\optimal_nnet_node_mse_40layer_1new.h5"
+r"E:\PhD project\ozone\Saved_Neural_Networks\082119_nnet_node_mse_40layer_1new.h5"
 
 norm_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\SWD\large_data_norm.pkl"
+r"E:\PhD project\ozone\08212019_All_Data_Norm\large_data_norm.pkl"
+
+plot_settings(25,22,22,20,[10,10])
 
 model = load_model(neural_network_path,custom_objects={'r2_keras':r2_keras})
 s = joblib.load(norm_path)
@@ -56,10 +58,19 @@ Stack_Predict[:,X_header_list] = X_valid
 Stack_Predict[:,Y_header_list] = Y_pred
 Data_Array_Actual_invnorm = s.inverse_transform(Stack_Actual)
 Data_Array_Predict_invnorm = s.inverse_transform(Stack_Predict)
+
+
+
+
+
 #Store Y data
 Y_pred_ppm = Data_Array_Predict_invnorm[:,Y_Loc]*1000
 Y_act_ppm = Data_Array_Actual_invnorm[:,Y_Loc]*1000
-fig = plot_parity(Y_act_ppm,Y_pred_ppm,'Actual Ozone Values(ppb)','Predicted Ozone Values(ppb)',s = 0.1,maxset=True)
+
+fig = plot_parity(Y_valid[:,0],Y_pred[:,0],'Normalized $O_3$ Values','Predicted $O_3$ Values',s = 0.5)
+export_graphs('norm_parity_valid',fig,filetype = '.jpg')
+
+fig = plot_parity(Y_act_ppm,Y_pred_ppm,'Actual $O_3$ Values($ppb$)','Predicted $O_3$ Values($ppb$)',s = 0.5,maxset=True)
 export_graphs('unnorm_parity_valid',fig,filetype = '.jpg')
 
 
@@ -83,7 +94,11 @@ Data_Array_Predict_invnorm = s.inverse_transform(Stack_Predict)
 #Store Y data
 Y_pred_ppm = Data_Array_Predict_invnorm[:,Y_Loc]*1000
 Y_act_ppm = Data_Array_Actual_invnorm[:,Y_Loc]*1000
-fig = plot_parity(Y_act_ppm,Y_pred_ppm,'Actual Ozone Values(ppb)','Predicted Ozone Values(ppb)',s = 0.1,maxset=True)
+
+fig = plot_parity(Y_Other[:,0],Y_other_pred[:,0],'Normalized $O_3$ Values','Predicted $O_3$ Values',s = 0.5)
+export_graphs('norm_parity_other',fig,filetype = '.jpg')
+
+fig = plot_parity(Y_act_ppm,Y_pred_ppm,'Actual $O_3$ Values($ppb$)','Predicted $O_3$ Values($ppb$)',s = 0.5,maxset=True)
 export_graphs('unnorm_parity_other',fig,filetype = '.jpg')
 
 

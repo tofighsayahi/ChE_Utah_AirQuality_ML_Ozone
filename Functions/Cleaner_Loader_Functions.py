@@ -866,6 +866,30 @@ def Export_CSV_ALL(df_All_Data_dict_clean,Export_path):
             df_All_Data_dict_clean[location[i]][sensor[j]].to_csv(fullexportpath,index=False)
     print('Export Complete')
 
+"""
+Title:
+Remove_AirU_timezone
+
+Description:
+Remove AirU timezones
+    
+Function Dependencies:
+Python 3
+pandas
+
+Inputs:
+df_AirU_sensor_dict - AirU sensor dictionary dtype = dict
+
+Optional Inputs:
+None 
+
+Outputs:
+df_AirU_sensor_dict - new cleaned AirU sensor dictionary dtype = dict
+
+
+Optional Outputs:
+None 
+"""
 
 
 def Remove_AirU_timezone(df_AirU_sensor_dict):

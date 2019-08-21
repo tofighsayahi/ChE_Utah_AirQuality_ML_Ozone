@@ -11,24 +11,24 @@ from keras.models import load_model
 import os
 function_path = "../Functions"
 os.chdir(function_path)
+from Cleaner_Loader_Functions import indexall
 from Trainer_Functions import r2_keras,r2,mse
-from Analyzer_Functions import export_graphs
+from Analyzer_Functions import export_graphs,plot_settings
 import matplotlib.cm as cm
 from sklearn.externals import joblib
 import matplotlib.pyplot as plt
 plt.close('all')
 #import neural network
 import_nnet_path =\
-r"D:\AirQuality _Research\Neural_Network\Reduce_Params_Redo\PM1_PM10_SWD\remove_PM1_SWD_PM10_optimal_nnet_node_mse_150layer_5new.h5"
+r"E:\PhD project\ozone\Saved_Neural_Networks\082119_nnet_node_mse_40layer_1new.h5"
 #import normalization 
 import_norm_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1_SWD_PM10\large_data_norm.pkl"
+r"E:\PhD project\ozone\08212019_All_Data_Norm\large_data_norm.pkl"
 #import data
 import_data_path =\
-r"D:\AirQuality _Research\Data\Full_Redo_Data_Normalization\Remove_Params\PM1_SWD_PM10\All_Data_norm.csv"
+r"E:\PhD project\ozone\08212019_All_Data_Norm\All_Data_norm.csv"
 
-
-
+plot_settings(30,25,25,20,[30,10])
 
 #read data in 
 df = pd.read_csv(import_data_path)
@@ -61,11 +61,8 @@ Y = data_array[:,Y_header_list]
 X = data_array[:,X_header_list]
 month = np.array(df['Month'])
 month_diff = month[1:]-month[0:-1]
-sensor_loc = np.where(month_diff<0)[0]
-sensor_loc+=1
-sensor_list = []
-sensor_list.append(0)
-sensor_list += list(sensor_loc)
+
+
 #load the model
 model = load_model(import_nnet_path,custom_objects={'r2_keras':r2_keras})
 Y_pred = model.predict(X)
@@ -88,12 +85,12 @@ max_error_ppm = np.max(error_ppm)
 min_error_ppm = np.min(error_ppm)
 
 #
-for i in range(0,len(sensor_list)-1,1):
+for i in range(0,len(Sensor_name),1):
+    sensor_index = indexall(Sensor_List,Sensor_name[i])
     #plot datetime vs abs error
-    fig = plt.figure(figsize=(15,6))
-    plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
-                error[sensor_list[i]:sensor_list[i+1]],s=1.0,c = error[sensor_list[i]:sensor_list[i+1]],cmap = cm.inferno,vmin=0, vmax=1)
-    plt.colorbar()
+    fig = plt.figure()
+    plt.plot(date[sensor_index],\
+                error[sensor_index],'-k',linewidth=2.0)
     plt.xlabel('Date')
     plt.ylabel('Error')
     plt.title('Time Series of Sensor:'+Sensor_name[i])
@@ -103,12 +100,11 @@ for i in range(0,len(sensor_list)-1,1):
 
     #plot datetime vs error in ppm
 
-    fig = plt.figure(figsize=(15,6))
-    plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
-                error_ppm[sensor_list[i]:sensor_list[i+1]],s=1.0,c = error_ppm[sensor_list[i]:sensor_list[i+1]],cmap = cm.inferno,vmin=min_error_ppm, vmax=max_error_ppm)
-    plt.colorbar()
+    fig = plt.figure()
+    plt.plot(date[sensor_index],\
+                error_ppm[sensor_index],'-k',linewidth=2.0)
     plt.xlabel('Date')
-    plt.ylabel('Error (ppm)')
+    plt.ylabel('Error ($ppm$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
     plt.tight_layout()
     name = 'Real_Variable_Time_Series'+Sensor_name[i]
@@ -116,17 +112,21 @@ for i in range(0,len(sensor_list)-1,1):
     
     #plot datetime vs Ozone in ppm
 
-    fig = plt.figure(figsize=(15,6))
-    plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
-                Y_act_ppm[sensor_list[i]:sensor_list[i+1]],s=1.0,c = 'k',label = 'Data')
-    plt.scatter(date[sensor_list[i]:sensor_list[i+1]],\
-            Y_pred_ppm[sensor_list[i]:sensor_list[i+1]],s=1.0,c = 'r',label = 'Prediction')
+    fig = plt.figure()
+    plt.plot(date[sensor_index],\
+                Y_act_ppm[sensor_index],'k',linewidth=2.0,label = 'Data')
+    plt.plot(date[sensor_index],\
+            Y_pred_ppm[sensor_index],'--b',linewidth=1.0,label = 'Prediction')
     
     plt.legend()
     plt.xlabel('Date')
-    plt.ylabel('Ozone (ppm)')
+    plt.ylabel('$O_3$ ($ppm$)')
     plt.title('Real Variable Time Series of Sensor:'+Sensor_name[i])
     plt.tight_layout()
     name = 'Real_Variable_Time_Series_actual_data_'+Sensor_name[i]
     export_graphs(name,fig,filetype='.jpg')
-
+    
+    
+    debug = date[sensor_index]
+    print(debug[0])
+    print(debug[-1])
