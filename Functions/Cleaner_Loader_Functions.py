@@ -461,7 +461,8 @@ Inputs:
 df_AirU_dict - dictionary of AirU  values dtype = dict
 
 Optional Inputs:
-data_offset - convert GST to MST (7 hour difference)
+data_offset - convert GST to MST (7 hour difference) dtype = int
+dupes - deletes duplicate sensors dtype = bool
 
 Outputs:
 df_AirU_sensor_dict - outputs a clean dictionary of AirU values Separate d

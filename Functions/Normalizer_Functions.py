@@ -125,6 +125,9 @@ export_lg - export is an option dtype = bool
 date_convert- extract date is an option dtype = bool
 minmax - minmax addition is an option dtype = bool
 minmax_num - number to average to make min and max dtype = int
+mics – does the code need to add mics values? dtype = bool
+time_offset – offset time (ust to mst is 7 hrs) dtype = int
+time_mics – when the mics is set to 0.5 dtype = numpy array 
 
 Outputs:
 df_comb- dataframe with all the data with additional additions
@@ -138,7 +141,7 @@ None
 def Combine_All_Data(import_path,export_path,export_name,\
                      export_lg = True,date_convert=True,minmax = False,\
                      minmax_num = 5,mics = False,time_offset = -7,time_mics =\
-                     np.array([14,22])):
+                     np.array([14,22])):    
     #load the data in
     load_data_list = os.listdir(import_path)
     sensor_list = []
