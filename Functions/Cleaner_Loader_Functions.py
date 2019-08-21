@@ -470,7 +470,7 @@ by sensor and the date is converted to the correct timezone dtype = dict
 Optional Outputs:
 None 
 """
-def AIR_U_Sensor_Sep(df_AirU_dict,data_offset = -7):
+def AIR_U_Sensor_Sep(df_AirU_dict,data_offset = -7,dupes = False):
     #Setup new dictionary and get locations
     df_AirU_sensor_dict = dict()
     Location_name = list(df_AirU_dict)
@@ -484,10 +484,11 @@ def AIR_U_Sensor_Sep(df_AirU_dict,data_offset = -7):
         df_AirU_dict[Location_name[i]][header[0]] = pd.to_datetime(df_AirU_dict[Location_name[i]][header[0]])
         #Change the time
         df_AirU_dict[Location_name[i]][header[0]] = df_AirU_dict[Location_name[i]][header[0]]+pd.DateOffset(hours = data_offset) 
-        for j in range(0,len(header),1):
-            #remove duplicates
-            if header[j].find('.')>0:
-                del df_AirU_dict[Location_name[i]][header[j]]
+        if dupes:
+            for j in range(0,len(header),1):
+                #remove duplicates
+                if header[j].find('.')>0:
+                    del df_AirU_dict[Location_name[i]][header[j]]
         header = list(df_AirU_dict[Location_name[i]])
         #get the sensors
         header_params = header[1:]
@@ -865,3 +866,14 @@ def Export_CSV_ALL(df_All_Data_dict_clean,Export_path):
             df_All_Data_dict_clean[location[i]][sensor[j]].to_csv(fullexportpath,index=False)
     print('Export Complete')
 
+
+
+def Remove_AirU_timezone(df_AirU_sensor_dict):
+    location_name = list(df_AirU_sensor_dict)
+    for i in range(0,len(location_name),1):
+        sensor_name = list(df_AirU_sensor_dict[location_name[i]])
+        for j in range(0,len(sensor_name),1):
+            temp_date = df_AirU_sensor_dict[location_name[i]][sensor_name[j]]['date'].copy()
+            df_AirU_sensor_dict[location_name[i]][sensor_name[j]]['date'] =\
+            temp_date.dt.tz_localize(None)
+    return df_AirU_sensor_dict
