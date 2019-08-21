@@ -137,7 +137,8 @@ None
 
 def Combine_All_Data(import_path,export_path,export_name,\
                      export_lg = True,date_convert=True,minmax = False,\
-                     minmax_num = 5):
+                     minmax_num = 5,mics = False,time_offset = -7,time_mics =\
+                     np.array([14,22])):
     #load the data in
     load_data_list = os.listdir(import_path)
     sensor_list = []
@@ -173,7 +174,6 @@ def Combine_All_Data(import_path,export_path,export_name,\
         #if minmax take the average and make the lower average min and upper average 
         #This is done per sensor
         if minmax:
-            
             header_sensor = find_in_list(header_nn,sensor_id)
             for j in range(0,len(header_sensor),1):
                 index = indexall(header_nn,header_sensor[j])[0]
@@ -189,6 +189,24 @@ def Combine_All_Data(import_path,export_path,export_name,\
             else:
                 Add_Data = np.vstack([Add_Data,Add_Data_temp])
     #add this to the a data frame and make sure it is added to the headers    
+    #add mics to dataframe
+    if mics:
+        temp_header = 'MICS '+sensor_id
+        header_nn.append(temp_header)
+        Hour_loc = indexall(header_nn,'Hour')[0]
+        Hour_Array = np.array(Data_Array[:,Hour_loc])
+        Mics_Array = np.zeros_like(Hour_Array)
+        for j in range(0,len(time_mics),1):
+            adj_time_mics = np.mod(time_mics[j]+time_offset,24)
+            loc = np.where(Hour_Array==adj_time_mics)[0]
+            Mics_Array[loc] = 0.5
+        Data_Array = np.column_stack((Data_Array,Mics_Array))
+        mics_min = np.zeros_like(Mics_Array)
+        mics_max = np.ones_like(Mics_Array)*0.5
+        Add_Data = np.column_stack((Add_Data,mics_min))
+        Add_Data = np.column_stack((Add_Data,mics_max))
+
+            
     if minmax:
         Data_Array = np.column_stack((Data_Array,Add_Data))
         header_sensor = find_in_list(header_nn,sensor_id)
@@ -200,6 +218,7 @@ def Combine_All_Data(import_path,export_path,export_name,\
 
     #replace the header id
     header_new = replace_header_id(header_nn,sensor_id)
+    print(sensor_id)
     #make the new dataframe and combine everything
     df_all_data = pd.DataFrame(data = Data_Array,columns = header_new)
     df_sensor = pd.DataFrame(sensor_list, columns=['Sensor'])    

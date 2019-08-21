@@ -32,7 +32,8 @@ export_all_data = 'All_Data.csv'
 
 #returns dataframe that has all_data
 all_data = Combine_All_Data(import_alldata_path,export_alldata_path,\
-                            export_all_data,export_lg = True,minmax = True)
+                            export_all_data,export_lg = True,minmax = True,\
+                            mics=True)
 #list of variables that should be omitted from normalization
 Omit_list = ['date','Sensor']
 
