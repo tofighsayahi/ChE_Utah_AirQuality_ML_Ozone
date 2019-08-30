@@ -66,6 +66,9 @@ month_diff = month[1:]-month[0:-1]
 #load the model
 model = load_model(import_nnet_path,custom_objects={'r2_keras':r2_keras})
 Y_pred = model.predict(X)
+zero_loc = np.where(Y_pred<0)[0]
+Y_pred[zero_loc] = 0
+
 error = np.sqrt((Y_pred-Y)**2)
 
 

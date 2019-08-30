@@ -73,6 +73,8 @@ X = data_array[:,X_header_list]
 #load the model
 model = load_model(import_nnet_path,custom_objects={'r2_keras':r2_keras})
 Y_pred = model.predict(X)
+zero_loc = np.where(Y_pred<0)[0]
+Y_pred[zero_loc] = 0
 #restack data
 Stack_Actual = data_array.copy()
 Stack_Predict = data_array.copy()

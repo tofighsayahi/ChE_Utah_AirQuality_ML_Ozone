@@ -51,6 +51,8 @@ train_list,valid_list = norm_divider(data_array)
 X,Y,X_valid,Y_valid = divider_XY(X_header_list,Y_header_list,data_array,train_list,valid_list)
 #try to predict values
 Y_pred = model.predict(X_valid)
+zero_loc = np.where(Y_pred<0)[0]
+Y_pred[zero_loc] = 0
 
 #stack them back into where they came from so that we can reverse the normalization
 col = np.shape(data_array)[1]
@@ -88,6 +90,8 @@ data_array_test = np.array(df_test)
 X_Other = data_array_test[:,X_header_list]
 Y_Other = data_array_test[:,Y_header_list]
 Y_other_pred = model.predict(X_Other)
+zero_loc = np.where(Y_other_pred<0)[0]
+Y_other_pred[zero_loc] = 0
 
 #stack them back into where they came from so that we can reverse the normalization
 col = np.shape(data_array_test)[1]
